@@ -3,144 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Grand Countdown 2026 | Full Edition</title>
+    <title>The Grand Countdown 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #050505; color: white; overflow-x: hidden; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .text-glow { text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-        #wish-modal { display: none; }
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: white; overflow: hidden; margin: 0; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .text-glow { text-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+        #ban-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; color: #ff0000; }
+        .glitch-text { font-size: 4rem; font-weight: 900; animation: glitch 0.2s infinite; }
+        @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(-3px, -3px); } 60% { transform: translate(3px, 3px); } 80% { transform: translate(3px, -3px); } 100% { transform: translate(0); } }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
 
-    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px]"></div>
+    <div id="ban-screen">
+        <div class="glitch-text italic">ACCESS DENIED</div>
+        <div class="h-1 w-64 bg-red-600 my-8"></div>
+        <p class="text-xl tracking-[0.4em] uppercase font-bold text-center px-4">ระบบหยุดการทำงานแล้ว<br>เนื่องจากเลยเวลาที่กำหนด</p>
     </div>
 
-    <main class="relative z-10 text-center w-full max-w-4xl">
-        <div class="mb-8 opacity-60">
-            <p class="text-[10px] tracking-[0.5em] uppercase mb-2">Current Local Time</p>
-            <div id="current-time" class="text-2xl font-light tracking-widest">00:00:00</div>
+    <main id="main-ui" class="relative z-10 text-center w-full max-w-5xl">
+        <div class="mb-12 opacity-70">
+            <p class="text-[10px] tracking-[0.5em] uppercase mb-2">Real-time Local Time</p>
+            <div id="clock" class="text-3xl font-extralight tracking-widest text-white">00:00:00</div>
         </div>
 
-        <header class="mb-12">
-            <h1 id="main-title" class="text-4xl md:text-7xl font-extralight tracking-tighter text-glow">
-                COUNTDOWN TO <span class="font-extrabold text-blue-500">2026</span>
-            </h1>
-        </header>
+        <h1 id="title" class="text-5xl md:text-8xl font-extralight tracking-tighter text-glow mb-16 uppercase">
+            COUNTDOWN TO <span class="font-black text-blue-500">2026</span>
+        </h1>
 
-        <div id="countdown-wrapper" class="flex flex-wrap justify-center gap-4 md:gap-6">
-            <div class="glass w-20 h-28 md:w-36 md:h-44 rounded-3xl flex flex-col items-center justify-center">
-                <span id="days" class="text-2xl md:text-5xl font-bold">00</span>
-                <span class="text-[9px] uppercase tracking-widest mt-2 opacity-40">Days</span>
+        <div id="countdown-area" class="flex flex-wrap justify-center gap-4 md:gap-8 mb-16">
+            <div class="glass w-24 h-32 md:w-44 md:h-56 rounded-[2.5rem] flex flex-col items-center justify-center">
+                <span id="days" class="text-3xl md:text-7xl font-bold">00</span>
+                <span class="text-[10px] uppercase tracking-widest mt-4 opacity-40">Days</span>
             </div>
-            <div class="glass w-20 h-28 md:w-36 md:h-44 rounded-3xl flex flex-col items-center justify-center border-t-blue-500/30">
-                <span id="hours" class="text-2xl md:text-5xl font-bold">00</span>
-                <span class="text-[9px] uppercase tracking-widest mt-2 opacity-40">Hours</span>
+            <div class="glass w-24 h-32 md:w-44 md:h-56 rounded-[2.5rem] flex flex-col items-center justify-center border-t-blue-500/20">
+                <span id="hours" class="text-3xl md:text-7xl font-bold">00</span>
+                <span class="text-[10px] uppercase tracking-widest mt-4 opacity-40">Hours</span>
             </div>
-            <div class="glass w-20 h-28 md:w-36 md:h-44 rounded-3xl flex flex-col items-center justify-center">
-                <span id="minutes" class="text-2xl md:text-5xl font-bold">00</span>
-                <span class="text-[9px] uppercase tracking-widest mt-2 opacity-40">Min</span>
+            <div class="glass w-24 h-32 md:w-44 md:h-56 rounded-[2.5rem] flex flex-col items-center justify-center">
+                <span id="minutes" class="text-3xl md:text-7xl font-bold">00</span>
+                <span class="text-[10px] uppercase tracking-widest mt-4 opacity-40">Minutes</span>
             </div>
-            <div class="glass w-20 h-28 md:w-36 md:h-44 rounded-3xl flex flex-col items-center justify-center border-b-blue-500/30">
-                <span id="seconds" class="text-2xl md:text-5xl font-bold text-blue-500">00</span>
-                <span class="text-[9px] uppercase tracking-widest mt-2 opacity-40 text-blue-400">Sec</span>
+            <div class="glass w-24 h-32 md:w-44 md:h-56 rounded-[2.5rem] flex flex-col items-center justify-center border-b-blue-500/20 text-blue-400">
+                <span id="seconds" class="text-3xl md:text-7xl font-bold">00</span>
+                <span class="text-[10px] uppercase tracking-widest mt-4 opacity-40">Seconds</span>
             </div>
         </div>
 
-        <footer class="mt-12 flex flex-col items-center gap-6">
-            <button id="music-toggle" class="glass px-6 py-2 rounded-full text-[10px] tracking-widest hover:bg-white/10 transition-all uppercase opacity-60">
-                🔈 Sound Off
-            </button>
-        </footer>
+        <button id="music-btn" class="glass px-12 py-5 rounded-full text-xs font-bold tracking-[0.4em] uppercase hover:scale-105 transition-all active:scale-95">
+            🎵 Play Celebration Theme
+        </button>
     </main>
 
-    <div id="wish-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-        <div class="glass max-w-md w-full p-8 rounded-[2.5rem] text-center border-blue-500/50">
-            <h2 class="text-3xl font-bold mb-2">Make a Wish 🥂</h2>
-            <p class="text-sm opacity-60 mb-6">เริ่มต้นปี 2026 ด้วยสิ่งดีๆ อธิษฐานขอพรของคุณที่นี่</p>
-            <textarea id="wish-input" class="w-full h-32 bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder:opacity-30 focus:outline-none focus:border-blue-500 transition-all" placeholder="พิมพ์คำอธิษฐานของคุณ..."></textarea>
-            <button onclick="sendWish()" class="mt-6 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-600/20">
-                ส่งคำอธิษฐานสู่ดวงดาว ✨
-            </button>
+    <div id="wish-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-6 bg-black/95 backdrop-blur-3xl">
+        <div class="glass max-w-lg w-full p-10 rounded-[3rem] text-center border-blue-500/30">
+            <h2 class="text-4xl font-black mb-4">HAPPY NEW YEAR 2026! 🥂</h2>
+            <textarea id="wish-input" class="w-full h-40 bg-white/5 border border-white/10 rounded-2xl p-5 text-white focus:border-blue-500 transition-all outline-none" placeholder="อธิษฐานสิ่งที่คุณต้องการในปี 2026..."></textarea>
+            <button onclick="sendWish()" class="mt-8 w-full bg-blue-600 py-5 rounded-2xl font-bold uppercase tracking-widest shadow-xl shadow-blue-600/30">ส่งคำอธิษฐาน ✨</button>
         </div>
     </div>
 
-    <audio id="tick-sound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+    <audio id="player" loop>
+        <source src="narupon_54 - 7589931322466995474.m4a" type="audio/mp4">
+    </audio>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        const targetDate = new Date("January 1, 2026 00:00:00").getTime();
-        const tickSound = document.getElementById('tick-sound');
-        const musicToggle = document.getElementById('music-toggle');
-        let isSoundOn = false;
+        const TARGET = new Date("January 1, 2026 00:00:00").getTime();
+        const BAN_TIME = new Date("January 1, 2026 01:00:00").getTime();
+        const player = document.getElementById('player');
+        const musicBtn = document.getElementById('music-btn');
 
-        // อัปเดตเวลาปัจจุบัน
-        function updateCurrentTime() {
-            const now = new Date();
-            document.getElementById('current-time').innerText = now.toLocaleTimeString('th-TH');
-        }
-        setInterval(updateCurrentTime, 1000);
-
-        // คุมเสียง
-        musicToggle.addEventListener('click', () => {
-            isSoundOn = !isSoundOn;
-            musicToggle.innerText = isSoundOn ? "🔊 Sound On" : "🔈 Sound Off";
-            musicToggle.classList.toggle('opacity-100', isSoundOn);
+        musicBtn.addEventListener('click', () => {
+            if (player.paused) { player.play().catch(e => alert("อย่าลืมอัปโหลดไฟล์เพลงไว้ในโฟลเดอร์เดียวกันนะครับ!")); musicBtn.innerText = "🔇 Mute Sound"; }
+            else { player.pause(); musicBtn.innerText = "🎵 Play Celebration Theme"; }
         });
 
-        function updateCountdown() {
+        function run() {
             const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = d.toString().padStart(2, '0');
-            document.getElementById("hours").innerText = h.toString().padStart(2, '0');
-            document.getElementById("minutes").innerText = m.toString().padStart(2, '0');
-            document.getElementById("seconds").innerText = s.toString().padStart(2, '0');
-
-            if (isSoundOn && distance > 0) { tickSound.currentTime = 0; tickSound.play().catch(()=>{}); }
-
-            if (distance <= 0) {
-                clearInterval(interval);
+            if (now >= BAN_TIME) {
+                document.getElementById('ban-screen').style.display = 'flex';
+                document.getElementById('main-ui').style.display = 'none';
+                player.pause();
+                return;
+            }
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('th-TH');
+            const gap = TARGET - now;
+            if (gap > 0) {
+                document.getElementById("days").innerText = Math.floor(gap / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById("hours").innerText = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById("minutes").innerText = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById("seconds").innerText = Math.floor((gap % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            } else {
                 celebrate();
             }
         }
 
+        let isDone = false;
         function celebrate() {
-            document.getElementById('main-title').innerHTML = "HAPPY NEW YEAR <span class='text-blue-500'>2026</span>";
-            document.getElementById("countdown-wrapper").innerHTML = "<h2 class='text-5xl font-black animate-bounce'>CHEERS! 🥂</h2>";
-            document.getElementById('wish-modal').style.display = 'flex'; // แสดงกล่องขอพร
-            
-            const end = Date.now() + (15 * 1000);
-            (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#3b82f6', '#ffffff'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#3b82f6', '#ffffff'] });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
+            if (isDone) return;
+            isDone = true;
+            document.getElementById('title').innerHTML = "Welcome to <span class='text-blue-500 font-black'>2026</span>";
+            document.getElementById('countdown-area').innerHTML = "<div class='text-6xl md:text-8xl font-black animate-pulse'>HAPPY NEW YEAR!</div>";
+            document.getElementById('wish-modal').classList.remove('hidden');
+            document.getElementById('wish-modal').classList.add('flex');
+            setInterval(() => {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+            }, 250);
         }
 
         function sendWish() {
-            const wish = document.getElementById('wish-input').value;
-            if(wish) {
-                alert("คำอธิษฐานของคุณถูกส่งแล้ว: " + wish + "\nขอให้ปี 2026 เป็นปีที่ดีของคุณครับ!");
-                document.getElementById('wish-modal').style.display = 'none';
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            } else {
-                alert("กรุณาพิมพ์คำอธิษฐานก่อนส่งนะครับ");
-            }
+            alert("พรปีใหม่ของคุณถูกส่งแล้ว!");
+            document.getElementById('wish-modal').classList.add('hidden');
         }
 
-        const interval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-        updateCurrentTime();
+        setInterval(run, 1000);
+        run();
     </script>
 </body>
 </html>
