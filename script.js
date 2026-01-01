@@ -1,4 +1,4 @@
-// 1. Particle Background Setup
+// 1. Particle Background
 tsParticles.load("tsparticles", {
     particles: {
         number: { value: 50 },
@@ -9,7 +9,7 @@ tsParticles.load("tsparticles", {
     }
 });
 
-// 2. ฐานข้อมูลวันสำคัญ (ระบุเดือนเป็น 0-11 ตามมาตรฐาน JS)
+// 2. ข้อมูลวันสำคัญ (ตามที่คุณระบุมา)
 const holidayData = [
     { d: 1, m: 0, n: 'วันขึ้นปีใหม่ (หยุดยาว 1-5 ม.ค.)' },
     { d: 2, m: 0, n: 'วันหยุดพิเศษ (ชดเชยปีใหม่)' },
@@ -25,7 +25,7 @@ const holidayData = [
     { d: 4, m: 4, n: 'วันฉัตรมงคล' },
     { d: 11, m: 4, n: 'วันพืชมงคล' },
     { d: 31, m: 4, n: 'วันวิสาขบูชา' },
-    { d: 1, m: 5, n: 'วันชดเชยวิสาขบูชา / วันดื่มนมโลก' },
+    { d: 1, m: 5, n: 'ชดเชยวิสาขบูชา / วันดื่มนมโลก' },
     { d: 3, m: 5, n: 'วันเฉลิมฯ พระราชินี' },
     { d: 5, m: 5, n: 'วันสิ่งแวดล้อมโลก' },
     { d: 21, m: 5, n: 'วันโยคะสากล' },
@@ -38,86 +38,96 @@ const holidayData = [
     { d: 20, m: 10, n: 'วันเด็กสากล' },
     { d: 24, m: 10, n: 'วันลอยกระทง' },
     { d: 5, m: 11, n: 'วันพ่อแห่งชาติ' },
-    { d: 7, m: 11, n: 'วันหยุดชดเชยวันพ่อแห่งชาติ' },
+    { d: 7, m: 11, n: 'วันชดเชยวันพ่อแห่งชาติ' },
     { d: 10, m: 11, n: 'วันรัฐธรรมนูญ' },
     { d: 25, m: 11, n: 'วันคริสต์มาส' },
     { d: 31, m: 11, n: 'วันสิ้นปี' }
 ];
 
-let targetDate = new Date("Jan 1, 2027 00:00:00").getTime();
+// ล็อคเป้าหมายเป็นปี 2027 (พ.ศ. 2570)
+let targetYear = 2027;
+let targetDate = new Date(`Jan 1, ${targetYear} 00:00:00`).getTime();
 let isCelebrated = false;
 
-// 3. ฟังก์ชันอัปเดตระบบแบบ Real-time
 function updateSystem() {
     const now = new Date();
-    const day = now.getDate();
-    const month = now.getMonth();
-
-    // แสดงวันที่และนาฬิกา
+    const currentTime = now.getTime();
+    
+    // แสดงวันที่และนาฬิกาบนหน้าจอ
     document.getElementById('currentDate').innerText = now.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     document.getElementById('realTimeClock').innerText = now.toLocaleTimeString('en-GB');
 
-    // คำนวณจันทรคติ (ขึ้น/แรม) และเช็ควันสำคัญวันนี้
-    const lunarStr = calculateThaiLunar(now);
-    const todaySpecial = holidayData.find(h => h.d === day && h.m === month);
+    // คำนวณส่วนต่างเวลา
+    const diff = targetDate - currentTime;
+
+    // ระบบเช็คเงื่อนไข
+    if (diff <= 0 && !isCelebrated) {
+        // ถึงปีใหม่แล้ว
+        triggerCelebration();
+    } else if (diff > 0) {
+        // ยังไม่ถึงปีใหม่ ให้รัน Countdown
+        isCelebrated = false;
+        document.getElementById('wait-screen').classList.remove('hidden');
+        document.getElementById('celebration-screen').classList.add('hidden');
+        renderCountdown(diff);
+    }
+
+    // อัปเดตข้อมูลจันทรคติและวันสำคัญ
+    updateLunarAndHolidays(now);
+}
+
+function renderCountdown(diff) {
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('days').innerText = d.toString().padStart(2, '0');
+    document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+    document.getElementById('mins').innerText = m.toString().padStart(2, '0');
+    document.getElementById('secs').innerText = s.toString().padStart(2, '0');
+}
+
+function updateLunarAndHolidays(now) {
+    const d = now.getDate();
+    const m = now.getMonth();
     
+    // คำนวณจันทรคติ
+    const ref = new Date("2024-01-11").getTime();
+    const diffDays = (now.getTime() - ref) / 86400000;
+    const cycle = diffDays % 29.53059;
+    const dayLunar = Math.floor(cycle);
+    const lunarStr = dayLunar < 15 ? `ขึ้น ${dayLunar + 1} ค่ำ` : `แรม ${dayLunar - 14} ค่ำ`;
+
+    const todaySpecial = holidayData.find(h => h.d === d && h.m === m);
     document.getElementById('lunarDate').innerHTML = todaySpecial 
         ? `${lunarStr} | <span class="today-special">🌟 ${todaySpecial.n}</span>` 
         : lunarStr;
 
-    // Countdown Logic
-    const diff = targetDate - now.getTime();
-    if (diff <= 0 && !isCelebrated) {
-        triggerCelebration();
-    } else if (!isCelebrated) {
-        renderCountdown(diff);
-        renderUpcomingHolidays(now);
-    }
+    // แสดงรายการวันสำคัญถัดไป
+    renderHolidayList(now);
 }
 
-// 4. ฟังก์ชันคำนวณจันทรคติไทย (โดยประมาณ)
-function calculateThaiLunar(date) {
-    const refNewMoon = new Date("2024-01-11").getTime(); 
-    const diffDays = (date.getTime() - refNewMoon) / 86400000;
-    const cycle = diffDays % 29.53059;
-    const d = Math.floor(cycle);
-    return d < 15 ? `ขึ้น ${d + 1} ค่ำ` : `แรม ${d - 14} ค่ำ`;
-}
-
-// 5. แสดงรายการวันสำคัญที่กำลังจะมาถึง
-function renderUpcomingHolidays(now) {
-    const currentMonth = now.getMonth();
-    const currentDay = now.getDate();
+function renderHolidayList(now) {
+    const currentM = now.getMonth();
+    const currentD = now.getDate();
     const listEl = document.getElementById('holidayList');
-
-    const upcoming = holidayData.filter(h => (h.m > currentMonth) || (h.m === currentMonth && h.d > currentDay)).slice(0, 6);
-    const monthTh = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    
+    const upcoming = holidayData.filter(h => (h.m > currentM) || (h.m === currentM && h.d > currentD)).slice(0, 5);
+    const mNames = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
 
     listEl.innerHTML = upcoming.map(h => `
-        <div class="holiday-item">
-            <span>${h.d} ${monthTh[h.m]} 69</span>
-            <span>${h.n}</span>
-        </div>
+        <div class="holiday-item"><span>${h.d} ${mNames[h.m]} 69</span><span>${h.n}</span></div>
     `).join('');
-}
-
-function renderCountdown(diff) {
-    document.getElementById('days').innerText = Math.floor(diff / 86400000).toString().padStart(2, '0');
-    document.getElementById('hours').innerText = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
-    document.getElementById('mins').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-    document.getElementById('secs').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
 }
 
 function triggerCelebration() {
     isCelebrated = true;
     document.getElementById('wait-screen').classList.add('hidden');
     document.getElementById('celebration-screen').classList.remove('hidden');
-    const end = Date.now() + 20000;
-    (function frame() {
-        confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#d4af37', '#ffffff'] });
-        confetti({ particleCount: 7, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#d4af37', '#ffffff'] });
-        if (Date.now() < end) requestAnimationFrame(frame);
-    }());
+    
+    // พลุ
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4af37', '#ffffff'] });
 }
 
 function applyTest() {
@@ -125,8 +135,7 @@ function applyTest() {
     if(val) {
         targetDate = new Date(val).getTime();
         isCelebrated = false;
-        document.getElementById('wait-screen').classList.remove('hidden');
-        document.getElementById('celebration-screen').classList.add('hidden');
+        updateSystem();
     }
 }
 
