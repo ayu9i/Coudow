@@ -3,120 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown to 2027 | The Final Mission</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #050505; color: white; overflow: hidden; margin: 0; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .text-glow { text-shadow: 0 0 25px rgba(59, 130, 246, 0.5); }
-        #ban-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
-        .glitch-red { color: #ff0000; text-shadow: 0 0 15px rgba(255, 0, 0, 0.7); animation: pulse 0.8s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    </style>
+    <title>The Grand Countdown | 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+<body>
+    <div id="tsparticles"></div>
 
-    <div id="ban-screen" class="p-6">
-        <h1 class="glitch-red text-5xl md:text-7xl font-black italic mb-6">ACCESS DENIED</h1>
-        <div class="h-1 w-64 bg-red-600 mb-8 mx-auto"></div>
-        
-        <div class="space-y-6 max-w-2xl">
-            <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">ภารกิจเสร็จสิ้น แล้วพบกันใหม่ปีหน้า</h2>
-            <div class="space-y-3 text-white/70 font-light leading-relaxed text-sm md:text-base">
-                <p>ขอขอบคุณที่ร่วมเดินทางและรอคอยช่วงเวลาที่สวยงามนี้ไปด้วยกัน</p>
-                <p>ขอให้ปีใหม่นี้เป็นปีที่ดวงดาวทุกดวงส่องแสงนำทางให้คุณไปสู่ความสำเร็จ</p>
-                <p>ขอให้ทุกความปรารถนาที่ได้อธิษฐานไว้ กลายเป็นความจริงในเร็ววัน</p>
-                <p>ขอให้รอยยิ้มและความสุขเบ่งบานในหัวใจของคุณตลอด 365 วันต่อจากนี้</p>
-                <p>จงใช้ชีวิตให้คุ้มค่า เก็บเกี่ยวทุกความทรงจำ และเติบโตอย่างงดงาม</p>
-                <p>รักษาสุขภาพและจิตใจให้แข็งแรง เพื่อกลับมาพบกันใหม่ในการนับถอยหลังครั้งต่อไป</p>
-                <p class="text-blue-400 font-semibold italic mt-4">"ด้วยความปรารถนาดีอย่างที่สุด... สวัสดีปีใหม่"</p>
+    <div class="wrapper">
+        <section id="wait-screen" class="content-box">
+            <div class="header-zone">
+                <p id="currentDate">-- JANUARY 2026 --</p>
+                <h2 id="realTimeClock">00:00:00</h2>
             </div>
-        </div>
+
+            <div class="countdown-display">
+                <div class="unit">
+                    <span id="days">00</span>
+                    <label>Days</label>
+                </div>
+                <div class="unit">
+                    <span id="hours">00</span>
+                    <label>Hours</label>
+                </div>
+                <div class="unit">
+                    <span id="mins">00</span>
+                    <label>Mins</label>
+                </div>
+                <div class="unit">
+                    <span id="secs">00</span>
+                    <label>Secs</label>
+                </div>
+            </div>
+        </section>
+
+        <section id="celebration-screen" class="content-box hidden">
+            <div class="reveal-animation">
+                <h1 class="main-title">HAPPY NEW YEAR</h1>
+                <h2 class="sub-title">2026</h2>
+                <div class="divider"></div>
+                <p class="wish-text">"ขอให้ปีนี้เป็นปีแห่งความสำเร็จ ความรุ่งโรจน์ และความสุขนิรันดร์ของคุณ"</p>
+                <button class="btn-restart" onclick="location.reload()">Begin New Journey</button>
+            </div>
+        </section>
     </div>
 
-    <main id="main-ui" class="relative z-10 w-full max-w-5xl">
-        <div class="mb-12 opacity-60 uppercase tracking-[0.4em] text-[10px]">Real-time Systems Online</div>
-        
-        <h1 id="title" class="text-5xl md:text-8xl font-extralight tracking-tighter text-glow mb-16">
-            COUNTDOWN TO <span class="font-black text-blue-600">2027</span>
-        </h1>
+    <div class="lab-control">
+        <p>LAB MODE</p>
+        <input type="datetime-local" id="testInput">
+        <button onclick="applyTest()">WARP TIME</button>
+    </div>
 
-        <div id="countdown-area" class="flex flex-wrap justify-center gap-4 md:gap-8 mb-16">
-            <div class="glass w-24 h-32 md:w-44 md:h-56 rounded-[2.5rem] flex flex-col items-center justify-center">
-                <span id="days" class="text-3xl md:text-7xl font-bold">00</span>
-                <span class="text-[10px] uppercase tracking-widest mt-4 opacity-40">Days</span>
-            </div>
-            <div class="glass w-24 h-32 md:w-44 md:h-56 rounded-[2.5rem] flex flex-col items-center justify-center">
-                <span id="hours" class="text-3xl md:text-7xl font-bold">00</span>
-                <span class="text-[10px] uppercase tracking-widest mt-4 opacity-40">Hours</span>
-            </div>
-            <div class="glass w-24 h-32 md:w-44 md:h-56 rounded-[2.5rem] flex flex-col items-center justify-center">
-                <span id="minutes" class="text-3xl md:text-7xl font-bold">00</span>
-                <span class="text-[10px] uppercase tracking-widest mt-4 opacity-40">Minutes</span>
-            </div>
-            <div class="glass w-24 h-32 md:w-44 md:h-56 rounded-[2.5rem] flex flex-col items-center justify-center text-blue-500">
-                <span id="seconds" class="text-3xl md:text-7xl font-bold">00</span>
-                <span class="text-[10px] uppercase tracking-widest mt-4 opacity-40">Seconds</span>
-            </div>
-        </div>
-
-        <button id="music-btn" class="glass px-12 py-5 rounded-full text-[10px] font-bold tracking-[0.4em] uppercase hover:bg-white/5 transition-all">
-            🎵 Play Celebration Theme
-        </button>
-    </main>
-
-    <audio id="player" loop>
-        <source src="narupon_54 - 7589931322466995474.m4a" type="audio/mp4">
-    </audio>
-
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script>
-        // ตั้งเป้าหมายเป็น 1 มกราคม ปีถัดไป
-        const NEXT_YEAR = new Date().getFullYear() + 1;
-        const TARGET = new Date(`January 1, ${NEXT_YEAR} 00:00:00`).getTime();
-        const BAN_TIME = new Date(`January 1, ${NEXT_YEAR} 01:00:00`).getTime();
-        
-        const player = document.getElementById('player');
-        const musicBtn = document.getElementById('music-btn');
-
-        musicBtn.addEventListener('click', () => {
-            if (player.paused) { player.play(); musicBtn.innerText = "🔇 Mute Sound"; }
-            else { player.pause(); musicBtn.innerText = "🎵 Play Celebration Theme"; }
-        });
-
-        function update() {
-            const now = new Date().getTime();
-
-            // ตรวจสอบเวลาแบน (ถ้าเลยตี 1 ของปีหน้า)
-            if (now >= BAN_TIME) {
-                document.getElementById('ban-screen').style.display = 'flex';
-                document.getElementById('main-ui').style.display = 'none';
-                player.pause();
-                return;
-            }
-
-            const gap = TARGET - now;
-            if (gap > 0) {
-                const d = Math.floor(gap / (1000 * 60 * 60 * 24));
-                const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((gap % (1000 * 60)) / 1000);
-
-                document.getElementById("days").innerText = d.toString().padStart(2, '0');
-                document.getElementById("hours").innerText = h.toString().padStart(2, '0');
-                document.getElementById("minutes").innerText = m.toString().padStart(2, '0');
-                document.getElementById("seconds").innerText = s.toString().padStart(2, '0');
-            } else {
-                // ช่วงเวลา 00:00 - 01:00 (ฉลอง)
-                document.getElementById('title').innerHTML = "HAPPY NEW YEAR <span class='text-blue-500 font-black'>2027</span>";
-                confetti({ particleCount: 2, angle: 60, spread: 55, origin: { x: 0 } });
-                confetti({ particleCount: 2, angle: 120, spread: 55, origin: { x: 1 } });
-            }
-        }
-
-        setInterval(update, 1000);
-        update();
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
