@@ -3,55 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Grand Countdown | 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>The Grand Countdown 2570</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@300;500;700&family=Prompt:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="tsparticles"></div>
 
-    <div class="wrapper">
-        <section id="wait-screen" class="content-box">
-            <div class="header-zone">
-                <p id="currentDate">-- JANUARY 2026 --</p>
+    <div class="main-container">
+        <section id="wait-screen" class="glass-panel">
+            <div class="header">
+                <p id="currentDate" class="gold-text">-- LOADING --</p>
                 <h2 id="realTimeClock">00:00:00</h2>
             </div>
 
-            <div class="countdown-display">
-                <div class="unit">
-                    <span id="days">00</span>
-                    <label>Days</label>
-                </div>
-                <div class="unit">
-                    <span id="hours">00</span>
-                    <label>Hours</label>
-                </div>
-                <div class="unit">
-                    <span id="mins">00</span>
-                    <label>Mins</label>
-                </div>
-                <div class="unit">
-                    <span id="secs">00</span>
-                    <label>Secs</label>
-                </div>
+            <div class="countdown-grid">
+                <div class="time-box"><span id="days">00</span><label>DAYS</label></div>
+                <div class="time-box"><span id="hours">00</span><label>HOURS</label></div>
+                <div class="time-box"><span id="mins">00</span><label>MINS</label></div>
+                <div class="time-box"><span id="secs">00</span><label>SECS</label></div>
+            </div>
+
+            <div class="important-dates">
+                <h3><span class="gold-text">✦</span> วันสำคัญปี 2569 <span class="gold-text">✦</span></h3>
+                <div id="holidayList" class="holiday-scroll"></div>
             </div>
         </section>
 
-        <section id="celebration-screen" class="content-box hidden">
-            <div class="reveal-animation">
-                <h1 class="main-title">HAPPY NEW YEAR</h1>
-                <h2 class="sub-title">2026</h2>
-                <div class="divider"></div>
-                <p class="wish-text">"ขอให้ปีนี้เป็นปีแห่งความสำเร็จ ความรุ่งโรจน์ และความสุขนิรันดร์ของคุณ"</p>
-                <button class="btn-restart" onclick="location.reload()">Begin New Journey</button>
+        <section id="celebration-screen" class="glass-panel hidden">
+            <div class="reveal-content">
+                <h1 class="grand-title">HAPPY NEW YEAR</h1>
+                <h2 class="grand-year">2570</h2>
+                <div class="gold-divider"></div>
+                <p class="wish-message">"ขอให้แสงทองแห่งปีใหม่ นำพาความสุขและความสำเร็จอันยิ่งใหญ่มาสู่คุณ"</p>
+                <button class="btn-primary" onclick="location.reload()">เริ่มต้นการเดินทางใหม่</button>
             </div>
         </section>
     </div>
 
-    <div class="lab-control">
-        <p>LAB MODE</p>
-        <input type="datetime-local" id="testInput">
-        <button onclick="applyTest()">WARP TIME</button>
+    <div class="lab-dashboard">
+        <button class="lab-toggle">TEST MODE</button>
+        <div class="lab-content">
+            <h4>WARP CONTROL</h4>
+            <input type="datetime-local" id="testInput">
+            <button onclick="applyTest()">WARP TIME</button>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
