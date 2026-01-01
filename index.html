@@ -3,40 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Grand Countdown 2570</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@300;500;700&family=Prompt:wght@300;400&display=swap" rel="stylesheet">
+    <title>The Infinite Countdown 2570</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Prompt:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="tsparticles"></div>
 
-    <div class="main-container">
+    <div class="wrapper">
         <section id="wait-screen" class="glass-panel">
-            <div class="header">
+            <div class="top-info">
                 <p id="currentDate" class="gold-text">-- LOADING --</p>
                 <h2 id="realTimeClock">00:00:00</h2>
             </div>
 
-            <div class="countdown-grid">
-                <div class="time-box"><span id="days">00</span><label>DAYS</label></div>
-                <div class="time-box"><span id="hours">00</span><label>HOURS</label></div>
-                <div class="time-box"><span id="mins">00</span><label>MINS</label></div>
-                <div class="time-box"><span id="secs">00</span><label>SECS</label></div>
+            <div class="countdown-display">
+                <div class="time-unit"><span id="days">00</span><label>DAYS</label></div>
+                <div class="time-unit"><span id="hours">00</span><label>HOURS</label></div>
+                <div class="time-unit"><span id="mins">00</span><label>MINS</label></div>
+                <div class="time-unit"><span id="secs">00</span><label>SECS</label></div>
             </div>
 
             <div class="important-dates">
-                <h3><span class="gold-text">✦</span> วันสำคัญปี 2569 <span class="gold-text">✦</span></h3>
-                <div id="holidayList" class="holiday-scroll"></div>
+                <h3 class="gold-text">✦ วันสำคัญปี 2569 - 2570 ✦</h3>
+                <div id="holidayList" class="holiday-scroll">
+                    </div>
             </div>
         </section>
 
         <section id="celebration-screen" class="glass-panel hidden">
-            <div class="reveal-content">
+            <div class="grand-reveal">
                 <h1 class="grand-title">HAPPY NEW YEAR</h1>
                 <h2 class="grand-year">2570</h2>
-                <div class="gold-divider"></div>
-                <p class="wish-message">"ขอให้แสงทองแห่งปีใหม่ นำพาความสุขและความสำเร็จอันยิ่งใหญ่มาสู่คุณ"</p>
-                <button class="btn-primary" onclick="location.reload()">เริ่มต้นการเดินทางใหม่</button>
+                <div class="gold-line"></div>
+                <p class="wish-text">"ขอให้แสงทองแห่งปีใหม่ นำพาความรุ่งโรจน์และความสุขนิรันดร์มาสู่คุณ"</p>
+                <button class="btn-restart" onclick="location.reload()">เริ่มต้นปีใหม่อีกครั้ง</button>
             </div>
         </section>
     </div>
